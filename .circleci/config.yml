@@ -9,10 +9,32 @@ jobs:
       - run:
           name: Install dependencies
           command: npm install
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - node_modules
+
+  build:
+    docker:
+      - image: cimg/node:18.13
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Build
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
 
 workflows:
   version: 2
   deploy_fe:
     jobs:
       - install
+      - build:
+          requires:
+            - install
     
