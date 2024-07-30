@@ -29,6 +29,22 @@ jobs:
           paths:
             - dist
 
+  deploy:
+    docker:
+      - image: cimg/node:18.13
+    steps:
+      - attach_workspace:
+          at: .
+
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:gySqaXDZh9bK2gTYDA2kI+Nz8U8QBqYq8PstDZ2ynOc"
+
+      - run:
+          name: Deploy to Amazon EC2 instance
+          command: |
+            scp -o StrictHostKeyChecking=no -r dist/ ubuntu@ec2-13-49-76-13.eu-north-1.compute.amazonaws.com:/var/www/html
+
 workflows:
   version: 2
   deploy_fe:
