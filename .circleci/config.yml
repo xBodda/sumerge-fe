@@ -1,0 +1,18 @@
+version: 2.1
+
+jobs:
+  install:
+    docker:
+      - image: cimg/node:18.13
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+
+workflows:
+  version: 2
+  deploy_fe:
+    jobs:
+      - install
+    
